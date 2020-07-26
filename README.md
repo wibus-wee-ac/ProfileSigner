@@ -1,13 +1,13 @@
 ProfileSigner
 =======
 
-ProfileSigner is a Python script that will encrypt and/or sign a .mobileconfig profile.
+ProfileSigner是一个Python脚本，它将加密和/或签名.mobileconfig配置文件。
 
-Currently, this only works with certificates stored in the Keychain.
+目前，这只对存储在密钥链中的证书有效。
 
-## Usage
+## 如何使用
 
-```
+```bash
 ./profile_signer.py -h
 usage: profile_signer.py [-h] [-k KEYCHAIN] -n NAME
                          {sign,encrypt,both} infile outfile
@@ -33,31 +33,31 @@ Keychain arguments:
   -n NAME, --name NAME  Common name of certificate to use from keychain.
 ```
 
-Note that the infile and outfile **must** be named differently.  You cannot overwrite the infile with the outfile.
+注意，infile和outfile**必须**以不同的名称命名。不能用输出文件覆盖infile。
 
-### Sign a profile
+### 签署一份概要
 
-If I wanted to sign a profile such as my [AcrobatPro.mobileconfig](https://github.com/nmcspadden/Profiles/blob/master/AcrobatPro.mobileconfig) with my "3rd Party Mac Developer Application" certificate from the Apple developer site, I'd use this command:  
-`./profile_signer.py -n "3rd Party Mac Developer Application" sign AcrobatPro.mobileconfig AcrobatProSigned.mobileconfig`
+如果我想用苹果开发者网站上的“第三方Mac开发者应用程序”证书签署一个文件，例如我的[AcrobatPro.mobileconfig](https://github.com/nmcspadden/Profiles/blob/master/AcrobatPro.mobileconfig)，我会使用这个命令:
+' ./ profile_siger .py -n "第三方Mac开发者应用程序"签署AcrobatPro。mobileconfig AcrobatProSigned.mobileconfig”
 
-Signing a profile will change the red "Unverified" text underneath the profile name in the Profiles pane of the System Preferences to a green "Verified" text.  Signed profiles cannot be tampered with without breaking the signing validation.
+签署一个概要文件将会把系统首选项的概要文件窗格中概要文件名称下面的红色“未验证”文本变成绿色的“已验证”文本。在不破坏签名验证的情况下，不能篡改签名配置文件。
 
-Note that whatever certificate you sign your profiles with must be trusted on your clients, otherwise they will refuse to install it without warning messages.
+注意，无论您用什么证书签署您的配置文件，都必须信任您的客户端，否则他们将拒绝安装它，没有警告消息。
 
-### Encrypt a profile
+### 加密配置文件
 
-If I wanted to encrypt that profile above, with the same certificate, I'd use this command:  
-`./profile_signer.py -n "3rd Party Mac Developer Application" encrypt AcrobatPro.mobileconfig AcrobatProEnc.mobileconfig`
+如果我想用相同的证书加密上面的配置文件，我会使用这个命令:
+' ./profile_signer.py -n "3rd Party Mac Developer Application" sign AcrobatPro.mobileconfig AcrobatProSigned.mobileconfig'
 
-Encrypted profiles (that are unsigned) will have encrypted payloads.  While the overall profile structure is visible as XML (and can be modified), the payload itself will be encrypted with the **public key of the certificate** you choose.
+加密的配置文件(未签名)将有加密的有效负载。虽然整个概要文件结构以XML的形式可见(并且可以修改)，但有效负载本身将使用您选择的证书**的**公钥加密。
 
-Note that the client machine you want to install the profile on must have the **private key of the certificate you signed with** in order to decrypt the profile.  If the client can't decrypt the profile, it can't install it.
+注意，要安装概要文件的客户机机器必须拥有与**签署的证书的**私钥，以便解密概要文件。如果客户端不能解密配置文件，它就不能安装它。
 
-If you want to encrypt a profile and ensure only a specific client will be able to receive / use it, you'll want to encrypt it using a machine-specific certificate for that client - and that setup is way outside of the scope of this project.  You could use something like Puppet certs for this.
+如果您想加密一个配置文件，并确保只有一个特定的客户端能够接收/使用它，那么您需要使用该客户端的特定机器证书来加密它——而该设置已经超出了本项目的范围。您可以使用类似于Puppet certs的东西。
 
-### Encrypt & Sign profiles
+### 加密和签名配置文件
 
-To both encrypt & sign, use this command:  
-`./profile_signer.py -n "3rd Party Mac Developer Application" both AcrobatPro.mobileconfig AcrobatProBoth.mobileconfig`
+要同时进行加密和签名，请使用以下命令:
+' ./profile_signer.py -n "3rd Party Mac Developer Application" both AcrobatPro.mobileconfig AcrobatProBoth.mobileconfig'
 
-The same rules apply as above - encrypting with the public key means it must be decrypted on the client with the private key.  Signing the profile means the client will complain if the certificate isn't trusted.
+应用与上面相同的规则——使用公钥加密意味着必须在客户机上使用私钥解密。对配置文件进行签名意味着如果证书不受信任，客户端将会警报。
